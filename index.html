@@ -511,17 +511,42 @@ footer{background:var(--blue-dark);color:rgba(255,255,255,.8);padding:3rem 2rem 
 
 <!-- LOGIN -->
 <div class="page" id="page-login">
-  <div class="page-header"><h1>&#x1F510; Admin Login</h1><p>Access the Ayan Express dashboard</p></div>
+  <div class="page-header">
+    <h1>&#x1F510; Admin Login</h1>
+    <p>Access the Ayan Express dashboard</p>
+  </div>
+
   <div class="section">
     <div class="login-card">
       <div class="login-logo"><span>AE</span></div>
-      <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:800;color:var(--blue-dark);margin-bottom:.3rem">Welcome Back</h2>
-      <p style="color:var(--text-light);font-size:.9rem;margin-bottom:2rem">Sign in to admin dashboard</p>
-      <div class="form-group" style="margin-bottom:1rem;text-align:left"><label>Username</label><input type="text" id="login-user" value="admin"/></div>
-      <div class="form-group" style="margin-bottom:1.5rem;text-align:left"><label>Password</label><input type="password" id="login-pass" value="ayan786"/></div>
-      <button class="btn-primary btn-full" onclick="doLogin()">Sign In &rarr;</button>
+
+      <h2 style="font-family:var(--font-head);font-size:1.5rem;font-weight:800;color:var(--blue-dark);margin-bottom:.3rem">
+        Welcome Back
+      </h2>
+
+      <p style="color:var(--text-light);font-size:.9rem;margin-bottom:2rem">
+        Sign in to admin dashboard
+      </p>
+
+      <!-- USERNAME -->
+      <div class="form-group" style="margin-bottom:1rem;text-align:left">
+        <label>Username</label>
+        <input type="text" id="admin-user" placeholder="Enter username" />
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="form-group" style="margin-bottom:1.5rem;text-align:left">
+        <label>Password</label>
+        <input type="password" id="admin-pass" placeholder="Enter password" />
+      </div>
+
+      <!-- LOGIN BUTTON -->
+      <button class="btn-primary btn-full" onclick="adminLogin()">
+        Sign In →
+      </button>
+
       <div class="error-msg" id="login-err" style="text-align:center;margin-top:1rem"></div>
-      <div style="margin-top:1.2rem;font-size:.78rem;color:var(--text-light)">Demo: admin / ayan786</div>
+
     </div>
   </div>
 </div>
@@ -760,7 +785,7 @@ footer{background:var(--blue-dark);color:rgba(255,255,255,.8);padding:3rem 2rem 
 </div>
 
 <!-- DASHBOARD -->
-<div class="page" id="page-dashboard">
+<div id="page-dashboard" style="display:none;">
   <div class="dash-sidebar" id="dash-sidebar">
     <div class="dash-logo"><div class="dash-logo-text">AYAN <span>EXPRESS</span></div><div class="dash-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3e7f677f707b666e6c7b6d6d0906087e79737f7772107d7173">[email&#160;protected]</a></div></div>
     <nav class="dash-nav">
@@ -856,19 +881,6 @@ function getZoneMultiplier(p1,p2){
   if(d===0)return 1.0;if(d<50)return 1.2;if(d<150)return 1.5;if(d<300)return 1.8;return 2.2;
 }
 
-function showPage(id){
-  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-  var pg=document.getElementById('page-'+id);
-  if(pg)pg.classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');});
-  var navEl=document.getElementById('nav-'+id);
-  if(navEl)navEl.classList.add('active');
-  var isDash=(id==='dashboard');
-  document.getElementById('main-nav').style.display=isDash?'none':'';
-  document.getElementById('whatsapp-btn').style.display=isDash?'none':'';
-  document.getElementById('nav-links').classList.remove('open');
-  window.scrollTo(0,0);
-}
 
 function toggleMobileMenu(){document.getElementById('nav-links').classList.toggle('open');}
 
@@ -984,12 +996,7 @@ function processPayment(){
   document.getElementById('pay-success').classList.add('show');
 }
 
-function doLogin(){
-  var u=document.getElementById('login-user').value;
-  var p=document.getElementById('login-pass').value;
-  if(u==='admin'&&p==='ayan786'){showPage('dashboard');renderDashboard();}
-  else{document.getElementById('login-err').textContent='❌ Invalid username or password';}
-}
+
 
 function doLogout(){showPage('home');}
 
@@ -1313,6 +1320,32 @@ window.addEventListener('load',function(){
     setTimeout(function(){loader.style.display='none';},500);
   },1800);
 });
+<script>
+let isLoggedIn = false;
+
+function adminLogin() {
+  const username = document.getElementById("admin-user").value;
+  const password = document.getElementById("admin-pass").value;
+
+  if (username === "admin" && password === "ayan786") {
+    isLoggedIn = true;
+    document.getElementById("login-err").innerText = "";
+    alert("Login Successful");
+    showPage('dashboard');
+  } else {
+    document.getElementById("login-err").innerText = "Invalid Username or Password";
+  }
+}
+
+function showPage(pageId) {
+  if (pageId === "dashboard" && !isLoggedIn) {
+    alert("Please login first!");
+    return;
+  }
+
+  document.querySelectorAll('.page').forEach(p => p.style.display = "none");
+  document.getElementById('page-' + pageId).style.display = "block";
+}
 </script>
 </body>
 </html>
